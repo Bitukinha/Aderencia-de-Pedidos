@@ -95,11 +95,12 @@ const Index = () => {
               produto: r.produto,
               quantidade: r.quantidade,
               dataPrevista: r.dataPrevista,
-              dataEntregue: r.dataEntregue,
+              dataEntregue: r.dataEntregue ?? "",
               diasAtraso: Number(r.diasAtraso) || 0,
               motivo: r.motivo || "",
               mes: r.mes as MesType,
               ano: Number(r.ano) || 2026,
+              segmento: r.segmento || "",
             } as DelayedOrder));
             setOrders(rows);
           }
