@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search, Filter } from "lucide-react";
-import { SEGMENTOS } from "@/data/orders";
 
 interface Props {
   search: string;
@@ -14,6 +13,7 @@ interface Props {
   onFilterSegmentoChange: (v: string) => void;
   produtos: string[];
   motivos: string[];
+  segmentos: string[];
 }
 
 const selectClass = "flex h-9 rounded-md border border-input bg-background px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -23,7 +23,7 @@ export function Filters({
   filterProduto, onFilterProdutoChange,
   filterMotivo, onFilterMotivoChange,
   filterSegmento, onFilterSegmentoChange,
-  produtos, motivos,
+  produtos, motivos, segmentos,
 }: Props) {
   return (
     <div className="bg-card rounded-lg shadow-sm p-4 flex flex-wrap items-end gap-4">
@@ -47,7 +47,7 @@ export function Filters({
         <Label className="text-xs">Segmento</Label>
         <select value={filterSegmento} onChange={(e) => onFilterSegmentoChange(e.target.value)} className={selectClass}>
           <option value="">Todos</option>
-          {SEGMENTOS.map((s) => <option key={s} value={s}>{s}</option>)}
+          {segmentos.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
       </div>
       <div className="space-y-1">

@@ -56,6 +56,23 @@ export type Database = {
           created_at?: string | null
         }
       }
+      segmentos: {
+        Row: {
+          id: number
+          nome: string
+          created_at: string | null
+        }
+        Insert: {
+          id?: number
+          nome: string
+          created_at?: string | null
+        }
+        Update: {
+          id?: number
+          nome?: string
+          created_at?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never

@@ -3,7 +3,7 @@ import { MonthDashboard } from "@/components/MonthDashboard";
 import { ComparisonChart } from "@/components/ComparisonChart";
 import { Filters } from "@/components/Filters";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Download, Plus, PlusCircle, X } from "lucide-react";
+import { Download, Plus, PlusCircle, X, Tags } from "lucide-react";
 import { Link } from "react-router-dom";
 import { exportToPdf } from "@/utils/exportPdf";
 import { delayedOrders as initialOrders, type DelayedOrder, MESES, type MesType } from "@/data/orders";
@@ -11,12 +11,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { OrderFormDialog } from "@/components/OrderFormDialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/hooks/useAuth";
+import { useSegmentos } from "@/hooks/useSegmentos";
 import nutrimilhoLogo from "@/assets/nutrimilho-logo.png";
 
 const Index = () => {
-  const { user, isAdmin, signOut } = useAuth();
-  const isAuthenticated = !!user;
+  const { segmentos } = useSegmentos();
 
   const [exporting, setExporting] = useState(false);
   const [orders, setOrders] = useState<DelayedOrder[]>(initialOrders);
@@ -201,22 +200,18 @@ const Index = () => {
               >
                 {anos.map((a) => <option key={a} value={a}>{a}</option>)}
               </select>
-              {isAdmin && (
-                <Button onClick={() => setDialogOpen(true)} className="gap-2" size="sm">
-                  <Plus size={16} /> Novo Pedido
+              <Button onClick={() => setDialogOpen(true)} className="gap-2" size="sm">
+                <Plus size={16} /> Novo Pedido
+              </Button>
+              <Link to="/segmentos">
+                <Button variant="outline" className="gap-2" size="sm">
+                  <Tags size={16} /> Segmentos
                 </Button>
-              )}
+              </Link>
               <Button variant="outline" onClick={handleExport} disabled={exporting} className="gap-2" size="sm">
                 <Download size={16} />
                 {exporting ? "Gerando..." : "PDF"}
               </Button>
-              {isAuthenticated ? (
-                <Button onClick={signOut} size="sm">Sair</Button>
-              ) : (
-                <Link to="/login">
-                  <Button size="sm">Entrar</Button>
-                </Link>
-              )}
             </div>
           </div>
 
@@ -226,7 +221,7 @@ const Index = () => {
             filterProduto={filterProduto} onFilterProdutoChange={setFilterProduto}
             filterMotivo={filterMotivo} onFilterMotivoChange={setFilterMotivo}
             filterSegmento={filterSegmento} onFilterSegmentoChange={setFilterSegmento}
-            produtos={produtos} motivos={motivos}
+            produtos={produtos} motivos={motivos} segmentos={segmentos}
           />
 
           {/* Month tabs */}
@@ -281,7 +276,7 @@ const Index = () => {
                 onNoPrazoChange={(v) => handleNoPrazoChange(mes, v)}
                 onEdit={openEdit}
                 onDelete={handleDelete}
-                isAuthenticated={isAdmin}
+                isAuthenticated={true}
               />
             </div>
           ))}
@@ -294,12 +289,8 @@ const Index = () => {
       </footer>
 
       {/* Dialogs */}
-      {isAdmin && (
-        <>
-          <OrderFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleAdd} />
-          <OrderFormDialog open={editingOrder !== null} onClose={() => setEditingOrder(null)} onSave={handleEdit} order={editingOrder?.order} />
-        </>
-      )}
+      <OrderFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleAdd} segmentos={segmentos} />
+      <OrderFormDialog open={editingOrder !== null} onClose={() => setEditingOrder(null)} onSave={handleEdit} order={editingOrder?.order} segmentos={segmentos} />
     </div>
   );
 };

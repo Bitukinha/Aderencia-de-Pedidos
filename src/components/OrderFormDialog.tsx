@@ -3,13 +3,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { type DelayedOrder, MESES, SEGMENTOS } from "@/data/orders";
+import { type DelayedOrder, MESES } from "@/data/orders";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onSave: (order: DelayedOrder) => void;
   order?: DelayedOrder | null;
+  segmentos: string[];
 }
 
 const currentYear = new Date().getFullYear();
@@ -27,7 +28,7 @@ const emptyOrder: DelayedOrder = {
   segmento: "",
 };
 
-export function OrderFormDialog({ open, onClose, onSave, order }: Props) {
+export function OrderFormDialog({ open, onClose, onSave, order, segmentos }: Props) {
   const [form, setForm] = useState<DelayedOrder>(emptyOrder);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export function OrderFormDialog({ open, onClose, onSave, order }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.cliente || !form.produto || !form.dataPrevista || !form.motivo) return;
+    if (!form.cliente || !form.produto || !form.dataPrevista) return;
     onSave(form);
     onClose();
   };
@@ -72,7 +73,7 @@ export function OrderFormDialog({ open, onClose, onSave, order }: Props) {
               <Label>Segmento</Label>
               <select value={form.segmento} onChange={(e) => set("segmento", e.target.value)} className={selectClass}>
                 <option value="">Selecione...</option>
-                {SEGMENTOS.map((s) => <option key={s} value={s}>{s}</option>)}
+                {segmentos.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
           </div>
@@ -117,14 +118,13 @@ export function OrderFormDialog({ open, onClose, onSave, order }: Props) {
                 onChange={(e) => set("diasAtraso", Number(e.target.value))}
                 readOnly={!!(form.dataPrevista && form.dataEntregue)}
                 className={form.dataPrevista && form.dataEntregue ? "bg-muted cursor-not-allowed" : ""}
-                required
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
             <Label>Motivo</Label>
-            <Input value={form.motivo} onChange={(e) => set("motivo", e.target.value)} placeholder="Motivo do atraso" required />
+            <Input value={form.motivo} onChange={(e) => set("motivo", e.target.value)} placeholder="Motivo do atraso (opcional)" />
           </div>
 
           <DialogFooter>
