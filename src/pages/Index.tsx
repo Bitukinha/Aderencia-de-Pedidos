@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { MonthDashboard } from "@/components/MonthDashboard";
+import { Footer } from "@/components/Footer";
 import { ComparisonChart } from "@/components/ComparisonChart";
 import { Filters } from "@/components/Filters";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -283,10 +284,7 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t py-4 text-center text-xs text-muted-foreground">
-        © 2026 Nutrimilho - Indicador de Aderência (Novaes Tech) | Todos os direitos reservados
-      </footer>
+      <Footer />
 
       {/* Dialogs */}
       <OrderFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleAdd} segmentos={segmentos} />
