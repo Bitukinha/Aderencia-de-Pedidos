@@ -16,6 +16,7 @@ interface Props {
 const currentYear = new Date().getFullYear();
 
 const emptyOrder: DelayedOrder = {
+  numero: "",
   cliente: "",
   produto: "",
   quantidade: "",
@@ -51,7 +52,7 @@ export function OrderFormDialog({ open, onClose, onSave, order, segmentos }: Pro
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.cliente || !form.produto || !form.dataPrevista) return;
-    onSave(form);
+    onSave({ ...form, numero: form.numero.trim() || "SN" });
     onClose();
   };
 
@@ -66,9 +67,16 @@ export function OrderFormDialog({ open, onClose, onSave, order, segmentos }: Pro
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
+              <Label>Número do Pedido</Label>
+              <Input value={form.numero} onChange={(e) => set("numero", e.target.value)} placeholder="Ex: 12345 (deixe em branco para SN)" />
+            </div>
+            <div className="space-y-1.5">
               <Label>Cliente</Label>
               <Input value={form.cliente} onChange={(e) => set("cliente", e.target.value)} placeholder="Nome do cliente" required />
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label>Segmento</Label>
               <select value={form.segmento} onChange={(e) => set("segmento", e.target.value)} className={selectClass}>
@@ -76,20 +84,17 @@ export function OrderFormDialog({ open, onClose, onSave, order, segmentos }: Pro
                 {segmentos.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label>Produto</Label>
               <Input value={form.produto} onChange={(e) => set("produto", e.target.value)} placeholder="Nome do produto" required />
             </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <Label>Quantidade</Label>
               <Input value={form.quantidade} onChange={(e) => set("quantidade", e.target.value)} placeholder="Ex: 14.000" />
             </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label>Mês</Label>
               <select value={form.mes} onChange={(e) => set("mes", e.target.value)} className={selectClass}>

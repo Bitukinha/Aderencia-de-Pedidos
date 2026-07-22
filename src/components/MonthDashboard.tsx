@@ -27,8 +27,9 @@ export function MonthDashboard({ mes, orders: allOrders, noPrazo, onNoPrazoChang
   const delayedOrders = monthOrders.filter((o) => o.diasAtraso > 0);
 
   const atrasados = delayedOrders.length;
-  const total = noPrazo + atrasados;
-  const aderencia = total > 0 ? (noPrazo / total) * 100 : 0;
+  const noPrazoTotal = noPrazo + onTimeOrders.length;
+  const total = noPrazoTotal + atrasados;
+  const aderencia = total > 0 ? (noPrazoTotal / total) * 100 : 0;
   const mediaAtraso = delayedOrders.length > 0
     ? (delayedOrders.reduce((s, o) => s + o.diasAtraso, 0) / delayedOrders.length).toFixed(1)
     : "0";
@@ -66,7 +67,7 @@ export function MonthDashboard({ mes, orders: allOrders, noPrazo, onNoPrazoChang
         <h2 className="text-xl font-bold text-foreground">{mes}</h2>
         {isAuthenticated && (
           <div className="flex items-center gap-2">
-            <Label className="text-xs text-muted-foreground whitespace-nowrap">Pedidos no prazo:</Label>
+            <Label className="text-xs text-muted-foreground whitespace-nowrap" title="Pedidos no prazo não cadastrados individualmente">Pedidos no prazo (extra):</Label>
             <Input
               type="number"
               min={0}
@@ -80,7 +81,7 @@ export function MonthDashboard({ mes, orders: allOrders, noPrazo, onNoPrazoChang
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
         <KpiCard title="Total de Pedidos" value={total} icon={<Package size={22} />} />
-        <KpiCard title="No Prazo" value={noPrazo} subtitle={`${aderencia.toFixed(1)}% aderência`} variant="success" icon={<TrendingUp size={22} />} />
+        <KpiCard title="No Prazo" value={noPrazoTotal} subtitle={`${aderencia.toFixed(1)}% aderência`} variant="success" icon={<TrendingUp size={22} />} />
         <KpiCard title="Atrasados" value={atrasados} subtitle={`${(100 - aderencia).toFixed(1)}% do total`} variant="danger" icon={<AlertTriangle size={22} />} />
         <KpiCard title="Média Atraso" value={`${mediaAtraso} dias`} variant="warning" icon={<Clock size={22} />} />
         <KpiCard title="Máximo Atraso" value={`${maxAtraso} dias`} variant="destructive" icon={<AlertTriangle size={22} />} />
@@ -88,7 +89,7 @@ export function MonthDashboard({ mes, orders: allOrders, noPrazo, onNoPrazoChang
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <AdherenceGauge label={`Aderência ${mes}`} rate={aderencia} noPrazo={noPrazo} total={total} />
+        <AdherenceGauge label={`Aderência ${mes}`} rate={aderencia} noPrazo={noPrazoTotal} total={total} />
 
         <div className="bg-card rounded-lg shadow-sm p-5">
           <h3 className="font-semibold text-card-foreground mb-3 text-sm">Dias de Atraso</h3>

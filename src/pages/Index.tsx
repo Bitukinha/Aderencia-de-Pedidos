@@ -22,7 +22,7 @@ const Index = () => {
   const [orders, setOrders] = useState<DelayedOrder[]>(initialOrders);
   const [activeMeses, setActiveMeses] = useState<MesType[]>(["Janeiro", "Fevereiro"]);
   const [selectedAno, setSelectedAno] = useState<number>(2026);
-  const [noPrazo, setNoPrazo] = useState<Record<string, number>>({ Janeiro: 44, Fevereiro: 28 });
+  const [noPrazo, setNoPrazo] = useState<Record<string, number>>({ Janeiro: 0, Fevereiro: 0 });
 
   const periodStart = activeMeses[0];
   const periodEnd = activeMeses[activeMeses.length - 1];
@@ -91,6 +91,7 @@ const Index = () => {
           if (!error && data) {
             // map rows to DelayedOrder shape if necessary
             const rows = data.map((r: any) => ({
+              numero: r.numero || "SN",
               cliente: r.cliente,
               produto: r.produto,
               quantidade: r.quantidade,

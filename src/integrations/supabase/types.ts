@@ -15,6 +15,7 @@ export type Database = {
       delayed_orders: {
         Row: {
           id: number
+          numero: string
           cliente: string
           produto: string
           quantidade: string
@@ -29,6 +30,7 @@ export type Database = {
         }
         Insert: {
           id?: number
+          numero?: string
           cliente: string
           produto: string
           quantidade?: string
@@ -43,6 +45,7 @@ export type Database = {
         }
         Update: {
           id?: number
+          numero?: string
           cliente?: string
           produto?: string
           quantidade?: string

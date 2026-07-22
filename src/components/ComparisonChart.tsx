@@ -12,8 +12,9 @@ export function ComparisonChart({ orders, noPrazo, activeMeses, anos }: Props) {
   // Comparison by month
   const monthData = activeMeses.map((mes) => {
     const monthOrders = orders.filter((o) => o.mes === mes);
-    const np = noPrazo[mes] ?? 0;
-    const atrasados = monthOrders.length;
+    const onTime = monthOrders.filter((o) => o.diasAtraso <= 0).length;
+    const atrasados = monthOrders.filter((o) => o.diasAtraso > 0).length;
+    const np = (noPrazo[mes] ?? 0) + onTime;
     const total = np + atrasados;
     const aderencia = total > 0 ? parseFloat(((np / total) * 100).toFixed(1)) : 0;
     return { mes, noPrazo: np, atrasados, aderencia };
@@ -22,12 +23,13 @@ export function ComparisonChart({ orders, noPrazo, activeMeses, anos }: Props) {
   // Comparison by year (if multiple years)
   const yearData = anos.map((ano) => {
     const yearOrders = orders.filter((o) => o.ano === ano);
-    const atrasados = yearOrders.length;
+    const onTime = yearOrders.filter((o) => o.diasAtraso <= 0).length;
+    const atrasados = yearOrders.filter((o) => o.diasAtraso > 0).length;
     // Sum noPrazo for all active months in this year
     const np = activeMeses.reduce((sum, mes) => {
       const key = `${mes}-${ano}`;
       return sum + (noPrazo[key] ?? noPrazo[mes] ?? 0);
-    }, 0);
+    }, 0) + onTime;
     const total = np + atrasados;
     const aderencia = total > 0 ? parseFloat(((np / total) * 100).toFixed(1)) : 0;
     return { ano: String(ano), noPrazo: np, atrasados, aderencia };

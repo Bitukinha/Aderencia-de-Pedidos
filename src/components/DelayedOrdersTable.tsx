@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function DelayedOrdersTable({ orders, globalIndices, onEdit, onDelete, isAuthenticated, title }: Props) {
-  const colSpan = isAuthenticated ? 9 : 8;
+  const colSpan = isAuthenticated ? 10 : 9;
   return (
     <div className="bg-card rounded-lg shadow-sm overflow-hidden">
       <div className="p-5 border-b">
@@ -22,6 +22,7 @@ export function DelayedOrdersTable({ orders, globalIndices, onEdit, onDelete, is
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-muted">
+              <th className="text-left p-3 font-medium text-muted-foreground">Número</th>
               <th className="text-left p-3 font-medium text-muted-foreground">Cliente</th>
               <th className="text-left p-3 font-medium text-muted-foreground">Segmento</th>
               <th className="text-left p-3 font-medium text-muted-foreground">Produto</th>
@@ -41,6 +42,7 @@ export function DelayedOrdersTable({ orders, globalIndices, onEdit, onDelete, is
             )}
             {orders.map((o, i) => (
               <tr key={i} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
+                <td className="p-3 text-card-foreground">{o.numero || "SN"}</td>
                 <td className="p-3 text-card-foreground font-medium">{o.cliente}</td>
                 <td className="p-3 text-card-foreground">
                   {o.segmento && (
