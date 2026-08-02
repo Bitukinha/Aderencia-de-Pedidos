@@ -55,6 +55,7 @@ export function MonthDashboard({ mes, orders: allOrders, noPrazo, onNoPrazoChang
 
   const reasons: Record<string, number> = {};
   monthOrders.forEach(o => {
+    if (!o.motivo || !o.motivo.trim()) return;
     const key = o.motivo.length > 35 ? o.motivo.substring(0, 35) + "..." : o.motivo;
     reasons[key] = (reasons[key] || 0) + 1;
   });
